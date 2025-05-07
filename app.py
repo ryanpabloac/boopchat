@@ -1,28 +1,23 @@
-import socket, asyncio
 import streamlit as st
-from client import client
-import server
 
-# async def main():
-    # st.write("# Chat")
-    # cliente = client(ip='localhost', port=8080)
-    # lc, rc = st.columns(2)
-    # msg = st.text_input(label="Mensagem:",key="msg")
-    # if msg:
-    #     cliente.connect()
-    #     cliente.send(msg=msg)
-    #     cliente.close()
-    # st.write(msg)
-
-async def clientea():
-    cliente = client(ip='localhost', port=8080)
-    msg = input("Msg: ")
-    if not msg.empty():
-        cliente.connect()
-        cliente.send(msg=msg)
-        cliente.close()
-    else:
-        print("Mensagem vazia")
-
-asyncio.run(server.server())
-asyncio.run(clientea())
+st.markdown("<h1 style='text-align: center; font-size: 64px;'>Chat</h1>", unsafe_allow_html=True)
+st.divider()
+lc, rc = st.columns(2)
+with lc:
+    st.write("## Client")
+    nickname = st.text_input("Nickname:", placeholder="Insira seu nickname...")
+    if nickname:   
+        with open("client.txt", "a") as f:
+            f.write(f"Nickname:{nickname}")
+        
+    def clear_text():
+        st.session_state.widget = ""
+        status = "Enviado"
+    msg = st.text_input('Mensagem', placeholder="Insira sua mensagem....",key='widget', on_change=clear_text)
+    
+    if msg:
+         st.write("Enviado")
+        
+with rc:
+    st.write("## Server")
+    st.write(f"Nickname: {nickname}")
