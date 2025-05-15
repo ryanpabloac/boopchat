@@ -1,23 +1,29 @@
-import streamlit as st
+from flask import Flask, request, render_template, redirect
+from pymongo import MongoClient
 
-st.markdown("<h1 style='text-align: center; font-size: 64px;'>Chat</h1>", unsafe_allow_html=True)
-st.divider()
-lc, rc = st.columns(2)
-with lc:
-    st.write("## Client")
-    nickname = st.text_input("Nickname:", placeholder="Insira seu nickname...")
-    if nickname:   
-        with open("client.txt", "a") as f:
-            f.write(f"Nickname:{nickname}")
-        
-    def clear_text():
-        st.session_state.widget = ""
-        status = "Enviado"
-    msg = st.text_input('Mensagem', placeholder="Insira sua mensagem....",key='widget', on_change=clear_text)
-    
-    if msg:
-         st.write("Enviado")
-        
-with rc:
-    st.write("## Server")
-    st.write(f"Nickname: {nickname}")
+client = MongoClient("mongodb://localhost:27017/")
+db = client["BoopChat"]
+colecao = db["Usuarios"]
+
+app = Flask(__name__)
+
+@app.route("/", methods=['GET'])
+def home():
+    return render_template('cadastro.html')
+
+@app.route("/cadastro", methods=['POST'])
+def cadastro():
+    nome = request.form.get('nome')
+    email = request.form.get('email')
+    senha = request.form.get('senha')
+
+    colecao.insert_one({
+        "nomeUsuario": nome,
+        "email": email,
+        "senha": senha
+    })
+
+    return redirect("/")
+
+if __name__ == '__main__':
+    app.run(debug=True)
