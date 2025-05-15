@@ -74,6 +74,9 @@ body {
   width: 100%;
   
 }
+.formulario input:focus {
+  outline: none;
+}
 
 .formulario button {
   background-color: #0f2e4d;
