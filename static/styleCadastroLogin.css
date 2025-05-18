@@ -98,3 +98,22 @@ body {
 .formulario a {
   color: white;
 }
+
+
+@media (max-width: 768px) {
+  body {
+    width: 100dvw;
+  }
+  .esquerda {
+    width: 80%;
+  }
+  .direita {
+    width: 20%;
+  }
+  .logo h1{
+    font-size: 20px;
+  }
+  .imagem {
+    width: 90px;
+  }
+}

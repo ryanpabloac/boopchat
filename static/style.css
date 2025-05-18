@@ -1,3 +1,4 @@
+@import url("./commonStyles.css");
 * {
     padding: 0;
     margin: 0;
@@ -8,7 +9,7 @@
 body {
     background-color: #1d3354;
     height: 100vh;
-    width: 100vw;
+    width: 100dvw;
     position: absolute;
 }
 header {
@@ -24,7 +25,7 @@ header {
     display: flex;
 
     img {
-        width: 45px;
+        width: 55px;
     }
     span {
         margin: auto 0;
@@ -43,15 +44,24 @@ header {
         margin: 10px 10px 0;
         text-decoration: none;
     }
+    a:hover {
+        font-weight: 600;
+        text-decoration: underline;
+    }
 }
 #bt-newmsg {
     margin: auto 0;
     font-family: 'Inter', sans-serif;
     font-size: 14px;
+    font-weight: 600;
     border: #25a18e 1px solid;
-    border-radius: 10px;
-    padding: 10px 20px;
+    border-radius: 5px;
+    padding: 7px 10px;
     text-decoration: none;
+}
+#bt-newmsg:hover {
+    background-color: #25a18e;
+    color: white;
 }
 
 #container {
@@ -71,15 +81,27 @@ header {
         font-style: italic;
         margin-bottom: 25px;
     }
+}
+#new-chat {
+    display: flex;
+    width: fit-content;
+    gap: 10px;
+    background-color: #47769acc;
+    border-radius: 20px;
+    padding: 0 20px;
     a {
         font-family: 'Inter', sans-serif;
         font-size: 16px;
-        background-color: #47769acc;
-        border-radius: 10px;
         text-decoration: none;
-        padding: 10px;
+        padding: 10px 0;
         
     }
+    img {
+        width: 16px;
+    }
+}
+#new-chat:hover {
+    background-color: #142B44;
 }
 #decoration {
     width: 50%;
@@ -92,7 +114,7 @@ header {
         width: 200px;
     }
 }
-footer {
+footer{
     font-family: 'Inter', sans-serif;
     text-align: center;
     font-size: 12px;
@@ -104,8 +126,28 @@ footer {
     }
 }
 @media (max-width: 768px) {
+    #logo {
+        img {
+            width: 55px;
+        }
+    }
+    #bt-newmsg {
+        margin: auto 0;
+        padding: 8px 10px;
+    }
     #links {
         display: none;
+    }
+    #slogan {
+        width: 80vw;
+    }
+    #new-chat {
+        width: fit-content;
+        gap: 5px;
+        padding: 0 10px;
+        img {
+            width: 16px;
+        }
     }
     #decoration {
         display: none;
