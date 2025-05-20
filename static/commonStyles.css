@@ -64,3 +64,19 @@
 .card #social-medias a{
     width: 30px;
 }
+
+#logo {
+    display: flex;
+
+    img {
+        width: 55px;
+    }
+    span {
+        margin: auto 0;
+        font-family: 'Montserrat', sans-serif;
+        font-weight: 800;
+        font-size: 18px;
+        cursor: default;
+        color: #ffffffa3;
+    }
+}
