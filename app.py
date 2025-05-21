@@ -1,13 +1,36 @@
+import sqlite3
 from flask import Flask, request, render_template, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
-from pymongo import MongoClient
 
 app = Flask(__name__)
-app.secret_key = 'sua_chave_secreta'
+app.secret_key = 'sua_chave_secreta_aqui'
 
-client = MongoClient("mongodb://localhost:27017/")
-db = client['BoopChat']
-usuarios_collection = db['usuarios']
+def init_db():
+    conn = sqlite3.connect('BoopChat.db')
+    cursor = conn.cursor()
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS usuario (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            nome TEXT NOT NULL,
+            email TEXT UNIQUE NOT NULL,
+            senha TEXT NOT NULL
+        );
+    ''')
+
+    cursor.execute('''
+        CREATE TABLE IF NOT EXISTS mensagem (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            usuario_id INTEGER NOT NULL,
+            mensagem TEXT NOT NULL,
+            data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+            FOREIGN KEY (usuario_id) REFERENCES usuario(id)
+        );
+    ''')
+
+
+    conn.commit()
+    conn.close()
 
 @app.route("/", methods=['GET'])
 def site():
@@ -17,17 +40,17 @@ def site():
 def retornoSite():
     return render_template('index.html')
 
-@app.route("/infos", methods=['GET'])
-def infos():
-    return render_template('infos.html')
-
 @app.route("/cadastro", methods=['GET'])
-def formulario_cadastro():
+def formularioCadastro():
     return render_template('cadastro.html')
 
 @app.route("/login", methods=['GET'])
-def formulario_login():
+def formularioLogin():
     return render_template('login.html')
+
+@app.route("/chat", methods=['GET'])
+def formularioChat():
+    return render_template('chat.html')
 
 @app.route("/cadastro", methods=['POST'])
 def cadastro():
@@ -36,35 +59,55 @@ def cadastro():
     senha = request.form.get('senha')
     senha_hash = generate_password_hash(senha)
 
-    if usuarios_collection.find_one({"email": email}):
+    try:
+        conn = sqlite3.connect('BoopChat.db')
+        cursor = conn.cursor()
+        cursor.execute("INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)", (nome, email, senha_hash))
+        conn.commit()
+        conn.close()
+        return redirect("/login")
+    except sqlite3.IntegrityError:
         return "Email já cadastrado."
-
-    usuarios_collection.insert_one({
-        "nome": nome,
-        "email": email,
-        "senha": senha_hash
-    })
-
-    return redirect("/login")
 
 @app.route("/login", methods=["POST"])
 def login():
     email = request.form.get("email")
     senha = request.form.get("senha")
 
-    usuario = usuarios_collection.find_one({"email": email})
+    conn = sqlite3.connect("BoopChat.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT id, senha FROM usuario WHERE email = ?", (email,))
+    usuario = cursor.fetchone()
+    conn.close()
 
-    if usuario and check_password_hash(usuario["senha"], senha):
+    if usuario and check_password_hash(usuario[1], senha):
         session["usuario_email"] = email
-        session["usuario_id"] = str(usuario["_id"])  
-        return "funcionou"
+        session["usuario_id"] = usuario[0]
+        return redirect("/chat")
     else:
         return "Email ou senha inválidos."
 
 @app.route("/logout")
 def logout():
     session.clear()
-    return redirect("/login")
+    return redirect("/retornoSite")
 
-if __name__ == "__main__":
+@app.route("/chat", methods=["POST"])
+def chat():
+    mensagem = request.form.get("mensagem")
+    usuario_id = session.get("usuario_id")
+
+    if not usuario_id:
+        return "Usuário não autenticado", 401
+
+    conn = sqlite3.connect("BoopChat.db")
+    cursor = conn.cursor()
+    cursor.execute("INSERT INTO mensagem (usuario_id, mensagem) VALUES (?, ?)",(usuario_id, mensagem))
+    conn.commit()
+    conn.close()
+    return redirect("/chat")
+
+
+if __name__ == '__main__':
+    init_db()
     app.run(debug=True)
