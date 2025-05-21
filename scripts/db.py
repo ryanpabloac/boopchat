@@ -14,12 +14,14 @@ cursor.execute('''
 
 cursor.execute('''
     CREATE TABLE IF NOT EXISTS mensagem (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        usuario_id INTEGER NOT NULL,
-        mensagem TEXT NOT NULL,
-        data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-        FOREIGN KEY (usuario_id) REFERENCES usuario(id)
-    );
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    remetente_id INTEGER NOT NULL,
+    destinatario_id INTEGER NOT NULL,
+    mensagem TEXT NOT NULL,
+    data_hora TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (remetente_id) REFERENCES usuario(id),
+    FOREIGN KEY (destinatario_id) REFERENCES usuario(id)
+);
 ''')
 
 
