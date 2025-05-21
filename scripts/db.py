@@ -13,7 +13,7 @@ cursor.execute('''
 ''')
 
 cursor.execute('''
-    CREATE TABLE IF NOT EXISTS mensagem (
+    CREATE TABLE IF NOT EXISTS chat (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     remetente_id INTEGER NOT NULL,
     destinatario_id INTEGER NOT NULL,

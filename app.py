@@ -23,7 +23,7 @@ def formularioLogin():
 
 @app.route("/chat", methods=['GET'])
 def formularioChat():
-    return render_template('chat.html', mensagem=msg)
+    return render_template('chat.html')
 
 @app.route("/cadastro", methods=['POST'])
 def cadastro():
@@ -37,7 +37,7 @@ def cadastro():
         cursor = conn.cursor()
         cursor.execute("INSERT INTO usuario (nome, email, senha) VALUES (?, ?, ?)", (nome, email, senha_hash))
         conn.commit()
-        conn.clos  e()
+        conn.close()
         return redirect("/login")
     except sqlite3.IntegrityError:
         return "Email já cadastrado."
@@ -49,7 +49,7 @@ def login():
 
     conn = sqlite3.connect("BoopChat.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, senha FROM usuario WHERE email = ?", (email,))
+    cursor.execute("SELECT id, senha FROM usuario WHERE email = ?", (email))
     usuario = cursor.fetchone()
     conn.close()
 
@@ -78,7 +78,7 @@ def chat():
     cursor.execute("INSERT INTO mensagem (usuario_id, mensagem) VALUES (?, ?)",(usuario_id, mensagem))
     conn.commit()
     conn.close()
-    return redirect("/chat", mensagem=msg)
+    return redirect("/chat", )
 
 
 if __name__ == '__main__':
