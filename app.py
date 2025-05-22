@@ -1,4 +1,6 @@
 import sqlite3
+from scripts import chating
+
 from flask import Flask, request, render_template, redirect, session
 from werkzeug.security import generate_password_hash, check_password_hash
 
@@ -23,7 +25,9 @@ def formularioLogin():
 
 @app.route("/chat", methods=['GET'])
 def formularioChat():
-    return render_template('chat.html')
+    chat = chating.Chat()
+    chats = chat.get_chats(session["usuario_id"])
+    return render_template('chat.html', chats=chats)
 
 @app.route("/cadastro", methods=['POST'])
 def cadastro():
@@ -49,7 +53,7 @@ def login():
 
     conn = sqlite3.connect("BoopChat.db")
     cursor = conn.cursor()
-    cursor.execute("SELECT id, senha FROM usuario WHERE email = ?", (email))
+    cursor.execute("SELECT id, senha FROM usuario WHERE email = ?", (email, ))
     usuario = cursor.fetchone()
     conn.close()
 
@@ -78,7 +82,7 @@ def chat():
     cursor.execute("INSERT INTO mensagem (usuario_id, mensagem) VALUES (?, ?)",(usuario_id, mensagem))
     conn.commit()
     conn.close()
-    return redirect("/chat", )
+    return redirect("/chat" )
 
 
 if __name__ == '__main__':
