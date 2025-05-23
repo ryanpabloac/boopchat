@@ -28,12 +28,7 @@ def formularioChat():
     chat = chating.Chat()
     chats = chat.get_chats(session["usuario_id"])
 
-    if session['ret']:
-        d_username = session.get("d_username")
-    else:
-        d_username = " "
-
-    return render_template('chat.html', chats=chats, d_username=d_username)
+    return render_template('chat.html', chats=chats)
 
 @app.route("/cadastro", methods=['POST'])
 def cadastro():
@@ -66,7 +61,6 @@ def login():
     if usuario and check_password_hash(usuario[1], senha):
         session["usuario_email"] = email
         session["usuario_id"] = usuario[0]
-        session['ret'] = False
         return redirect("/chat")
     else:
         return "Email ou senha inválidos."
@@ -83,7 +77,6 @@ def chat():
         d_username = data.get('d_username')
 
         session['d_username'] = d_username
-        session['ret'] = True
 
         return redirect(url_for("formularioChat"))
 

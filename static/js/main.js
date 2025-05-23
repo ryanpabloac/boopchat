@@ -8,6 +8,9 @@ chat_box.on("click", function() {
         url: "/chat",
         type: "POST",
         contentType: "application/json",
-        data: JSON.stringify({'d_username': dest_name})
+        data: JSON.stringify({'d_username': dest_name}),
+        success: function () {
+            $("#chat-profile").find("h1").text(dest_name);
+        }
     });
 });
