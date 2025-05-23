@@ -12,6 +12,86 @@ body {
     background-color: #142b44;
 }
 
+
+#pop-up {
+    position: absolute;
+    z-index: 10;
+    width: 100vw;
+    height: 100vh;
+    background-color: #25242469;
+    backdrop-filter: blur(5px);
+
+    a img {
+        position: absolute;
+        right: 22%;
+        top: 25%;
+        width: 20px;
+    }
+}
+#pop-up-box {
+    display: flex;
+    flex-direction: column;
+    margin: 20vh auto;
+    background-color: #142b44;
+    border-radius: 10px;
+    width: 60%;
+    height: 60%;
+    padding: 25px 20px;
+}
+
+#pop-up-box h1 {
+    font-size: 20px;
+    color: #13ad94;
+    text-align: center;
+    margin-bottom: 50px;
+}
+#pop-up-box form {
+    display: flex;
+    flex-direction: column;
+}
+#pop-up-box label {
+    color: #13ad94;
+    font-size: 12px;
+    margin-bottom: 10px;
+}
+#pop-up-box input {
+    border: none;
+    width: 70%;
+    border-bottom: 2px solid #13ad94;
+    background-color: #142b44;
+    margin-bottom: 30px;
+}
+#pop-up-box input:focus {
+    outline: none;
+}
+#pop-up-box textarea {
+    resize: none;
+    width: 70%;
+    height: 50px;
+    border: none;
+    border-bottom: 2px solid #13ad94;
+    background-color: #142b44; 
+}
+#pop-up-box textarea:focus {
+    outline: none;
+}
+#pop-up-box button {
+    margin-top: 20px;
+    align-self: center;
+    color: #13ad94;
+    font-weight: 700;
+    background-color: #142b44;
+    border: 1px solid #13ad94;
+    border-radius: 3px;
+    width: fit-content;
+    padding: 5px 8px;
+}
+#pop-up-box button:hover {
+    background-color: #13ad94;
+    color: white;
+    cursor: pointer;
+}
+
 #last-chats-box {
     width: 25vw;
     height: 100vh;
@@ -20,7 +100,30 @@ body {
     padding: 20px;
 }
 #logo {
-    margin-bottom: 50px;
+    margin-bottom: 30px;
+}
+#new-chat {
+    width: 60%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 14px;
+    font-weight: 800;
+    text-decoration: none;
+    background-color: #13ad94;
+    padding: 5px 8px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+#new-chat:hover {
+    background-color: #047260;
+}
+#new-chat img {
+    width: 20px;
+}
+.unshow {
+    display: none;
 }
 #last-chats h2 {
     color: #25a18e;

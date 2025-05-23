@@ -8,12 +8,27 @@
     <link rel="stylesheet" href="./../static/styleHome.css">
 </head>
 <body>
+    <section id="pop-up" class="unshow">
+        <a href=""><img src="./../static/src/close.svg"></a>
+        <div id="pop-up-box">
+           <h1>Nova Conversa</h1>
+           <form action="">
+                <label for="email">EMAIL DO DESTINATÁRIO</label>
+                <input type="email" name="email" id="email" placeholder="Digite o email do destinatário">
+                <label for="msg">MENSAGEM</label>
+                <textarea name="msg" id="msg" placeholder="Digite sua mensagem"></textarea>
+
+                <button type="submit">ENVIAR</button>
+           </form>
+
+        </div>
+    </section>
     <section id="last-chats-box">
        <div id="logo">
             <img src="../static/src/BoopLogo.png">
             <span>BoopChat</span>
         </div> 
-
+        <div id="new-chat"><img src="./../static/src/new-chat.svg"> Nova Conversa</div>
         <div id="last-chats">
             <h2>Conversas</h2>
             <div id="individuals">
@@ -22,18 +37,6 @@
                         <h1 class="name-chat">{{ name }}</h1>
                     </div>
                 {% endfor %}
-            </div>
-            <h2>Grupos</h2>
-            <div id="groups">
-                <div class="chat-box">
-                    <h1>Grupo 1</h1>
-                    <span>Hello World! sfgdv svfs sdvdsfbf sfvsvfv fvsddrsf sddfv sdvs</span>
-                </div>
-
-                <div class="chat-box">
-                    <h1>Grupo 2</h1>
-                    <span>Hello World! sfgdv svfs sdvdsfbf sfvsvfv fvsddrsf sddfv sdvs</span>
-                </div>
             </div>
         </div>
     </section>
