@@ -1,5 +1,7 @@
 const chat_box = $('.chat-box');
 const bt_show_popup = $('#new-chat');
+const pop_up = $('#pop-up');
+const bt_close_popup = pop_up.closest('a')
 
 chat_box.on("click", function() {
     const choosed_chat = $(this).closest('.chat-box');
@@ -16,12 +18,18 @@ chat_box.on("click", function() {
     });
 });
 
-bt_show_popup.click(function() {
-    const pop_up = $('#pop-up');
-    
-    if (pop_up.hasClass('unshow')) {
-        pop_up.removeCLass('unshow');
-    } else {
-        pop_up.addClass('unshow');
-    }
+bt_show_popup.on('click', function() {
+        pop_up.fadeIn("fast");
+    });
+
+bt_close_popup.on('click', function() {
+    pop_up.fadeOut("fast");
+});
+
+pop_up.on('click', function() {
+    pop_up.fadeOut("fast");
+});
+
+$("#pop-up-box").on('click', function(e) {
+    e.stopPropagation();
 });
