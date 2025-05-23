@@ -28,6 +28,10 @@ def formularioChat():
     chat = chating.Chat()
     chats = chat.get_chats(session["usuario_id"])
 
+    # if session["destinatario_id"]:
+    #     selected_chat = chat.get_msg(session["destinatario_id"], session["usuario_id"])
+    #     print(selected_chat)
+
     return render_template('chat.html', chats=chats)
 
 @app.route("/cadastro", methods=['POST'])
@@ -72,11 +76,21 @@ def logout():
 
 @app.route("/chat", methods=["POST"])
 def chat():
+    conn = sqlite3.connect("BoopChat.db")
+    cursor = conn.cursor()
+
     if request.headers.get('X-Requested-With') =='XMLHttpRequest':
         data = request.get_json()
         d_username = data.get('d_username')
 
         session['d_username'] = d_username
+        cursor.execute("SELECT id FROM usuario WHERE nome = ?", (d_username,))
+        destinatario_id = cursor.fetchone()
+
+        if not destinatario_id:
+            return "Destinatario não identificado", 401
+        
+        session['destinatario_id'] = destinatario_id
 
         return redirect(url_for("formularioChat"))
 
@@ -85,8 +99,6 @@ def chat():
         usuario_id = session.get("usuario_id")
         destinatario_nome = session.get("d_username")
 
-        conn = sqlite3.connect("BoopChat.db")
-        cursor = conn.cursor()
         cursor.execute("SELECT id FROM usuario WHERE nome = ?", (destinatario_nome,))
         destinatario_id = cursor.fetchone()
 

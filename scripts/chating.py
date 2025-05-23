@@ -51,8 +51,7 @@ class Chat():
         hist = self.cursor.fetchall()
         self.cursor.close()
 
-
-
+        return hist
 """ 
 
 [X] - Conectar com o banco
