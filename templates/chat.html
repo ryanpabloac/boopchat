@@ -8,8 +8,8 @@
     <link rel="stylesheet" href="./../static/styleHome.css">
 </head>
 <body>
-    <section id="pop-up" class="unshow">
-        <a href=""><img src="./../static/src/close.svg"></a>
+    <section id="pop-up">
+        <div href=""><img src="./../static/src/close.svg"></div>
         <div id="pop-up-box">
            <h1>Nova Conversa</h1>
            <form action="">
@@ -65,7 +65,8 @@
         </div>
     </section>
 
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script src="{{ url_for('static', filename='js/main.js') }}"></script>  
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script> 
+    <!-- <script src="./../static/js/main.js"></script> -->
 </body>
 </html>
