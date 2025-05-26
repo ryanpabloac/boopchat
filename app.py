@@ -7,6 +7,8 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta_aqui'
 
+
+
 @app.route("/", methods=['GET'])
 def site():
     return render_template('index.html')
@@ -25,14 +27,28 @@ def formularioLogin():
 
 @app.route("/chat", methods=['GET'])
 def formularioChat():
+    dest = session.get("d_username")
+    user = session.get("usuario_id")
+
+   
     chat = chating.Chat()
     chats = chat.get_chats(session["usuario_id"])
+    
+    conn = sqlite3.connect("BoopChat.db")
+    cursor = conn.cursor()
+    cursor.execute("SELECT nome FROM usuario WHERE id = ?", (user, ))
+    usuario = cursor.fetchone()
+    conn.close()
 
-    # if session["destinatario_id"]:
-    #     selected_chat = chat.get_msg(session["destinatario_id"], session["usuario_id"])
-    #     print(selected_chat)
+    msg = request.args.get('msg')
+    if msg: 
 
-    return render_template('chat.html', chats=chats)
+        chat = chating.Chat()
+        msgs = chat.get_msg(dest=session["destinatario_id"][0], remet=user)
+
+        return render_template('chat.html', chats=chats, msgs=msgs, user=usuario[0], dest=dest)
+    else:  
+        return render_template('chat.html', chats=chats, user=usuario, dest=dest)
 
 @app.route("/cadastro", methods=['POST'])
 def cadastro():
@@ -101,16 +117,16 @@ def chat():
 
         cursor.execute("SELECT id FROM usuario WHERE nome = ?", (destinatario_nome,))
         destinatario_id = cursor.fetchone()
-
         if not destinatario_id:
             return "Destinatario não identificado", 401
         if not usuario_id:
             return "Usuário não autenticado", 401
+        
 
         cursor.execute("INSERT INTO chat (remetente_id, destinatario_id, mensagem) VALUES (?, ?, ?);",(usuario_id, destinatario_id[0], mensagem))
         conn.commit()
         conn.close()
-        return redirect("/chat" )
+        return redirect("/chat" + "?msg=True")
 
 if __name__ == '__main__':
     app.run(debug=True)

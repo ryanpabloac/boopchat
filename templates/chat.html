@@ -47,16 +47,18 @@
         </div>
         <div id="chat">
             <div id="messages">
-                <div class="sent-message">
-                    <span class="username">username</span>
-                    <p>Hello World! lmbdkbmg  pbkdbm d pgdmbdgbpdm pdgbmgbpm pdbgmgdbpmd pgbdmgpbm ptbmdgpbm pbmdfbpmrsp ´dbm´dfbm</p>
-                    <span class="date">22/05/2025 15:35</span>
-                </div>
-                <div class="sent-message">
-                    <span class="username">username</span>
-                    <p>Hello World! lmbdkbmg  pbkdbm d pgdmbdgbpdm pdgbmgbpm pdbgmgdbpmd pgbdmgpbm ptbmdgpbm pbmdfbpmrsp ´dbm´dfbm</p>
-                    <span class="date">22/05/2025 15:35</span>
-                </div>
+                {% for msg in msgs %}
+                    <div class="sent-message">
+                        {% if msg[1] == userid %}
+                            <span class="username">{{ dest }}</span>
+                        {% else %}
+                            <span class="username">{{ user }}</span>
+                        {% endif %}
+                        <p>{{ msg[3] }}</p>
+                        <span class="date">{{ msg[4] }}</span>
+                    </div>
+                {% endfor %}
+                
             </div>
             <form id="controls" method="POST" action="chat">
                 <input type="text" placeholder="Insira sua mensagem ..." name="mensagem">

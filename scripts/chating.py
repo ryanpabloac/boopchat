@@ -41,7 +41,7 @@ class Chat():
         self.cursor.close()
         return chats
 
-    def insert(self, dest, remet, msg):
+    def send_msg(self, dest, remet, msg):
         self.cursor.execute("INSERT INTO chat (destinatario_id, remetente_id, mensagem) VALUES (? , ?, ?)", (int(dest), int(remet), str(msg)))
         self.conn.commit()
         self.cursor.close()
@@ -52,18 +52,8 @@ class Chat():
         self.cursor.close()
 
         return hist
-""" 
 
-[X] - Conectar com o banco
-
-==== C H A T S ====
-
-[X] - Pegar os nomes dos usuarios que ele conversou
-[X] - Armazenar o nome do usuario que ele esta conversando
-
-==== M S G ====
-
-[ ] - Mandar mensagem
-[ ] - Armazenar as mensagens 
-
-"""
+t = Chat()
+A = t.get_msg(dest=1,remet=2)
+for a in A:
+    print(a)
