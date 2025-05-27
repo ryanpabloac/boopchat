@@ -3,11 +3,20 @@ const bt_show_popup = $('#new-chat');
 const pop_up = $('#pop-up');
 const bt_close_popup = pop_up.closest('a');
 const box = $('#messages');
+let pollingInterval = null;
+let currentChat = null;
 
 chat_box.on("click", function() {
     const choosed_chat = $(this).closest('.chat-box');
     const dest_name = choosed_chat.find('.name-chat').text();
+    
+    if (pollingInterval) {
+        clearInterval(pollingInterval);
+    }
+    
+    currentChat = dest_name;
     box.empty();
+    
     $.ajax({
         url: "/chat",
         type: "POST",
@@ -15,15 +24,36 @@ chat_box.on("click", function() {
         data: JSON.stringify({'d_username': dest_name}),
         success: function (response) {
             $("#chat-profile").find("h1").text(dest_name);
-
             adicionar_mensagens(response);
+            
+            pollingInterval = setInterval(function() {
+                if (currentChat === dest_name) {
+                    $.ajax({
+                        url: "/chat",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify({'d_username': dest_name}),
+                        success: function (newResponse) {
+                            if (newResponse.length !== response.length) {
+                                box.empty();
+                                adicionar_mensagens(newResponse);
+                                response = newResponse;
+                            }
+                        },
+                        error: function () {
+                            clearInterval(pollingInterval);
+                            pollingInterval = null;
+                        }
+                    });
+                }
+            }, 5000);
         }
     });
 });
 
 bt_show_popup.on('click', function() {
-        pop_up.fadeIn("fast");
-    });
+    pop_up.fadeIn("fast");
+});
 
 bt_close_popup.on('click', function() {
     pop_up.fadeOut("fast");
@@ -45,7 +75,6 @@ function adicionar_mensagens(response) {
                 <p>${response[i]["mensagem"]}</p>
                 <span class="date">${response[i]["data"]}</span>
             </div>
-                `);
+        `);
     }
-
 }

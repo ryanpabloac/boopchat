@@ -3,7 +3,6 @@ from scripts import chating
 
 from flask import Flask, request, render_template, redirect, session, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
-
 app = Flask(__name__)
 app.secret_key = 'sua_chave_secreta_aqui'
 
@@ -30,7 +29,6 @@ def formularioChat():
     dest = session.get("d_username")
     user = session.get("usuario_id")
 
-   
     chat = chating.Chat()
     chats = chat.get_chats(session["usuario_id"])
     
@@ -49,11 +47,12 @@ def formularioChat():
             destinatario = session["destinatario_id"]
 
         chat = chating.Chat()
-        msgs = chat.get_msg(dest=destinatario, remet=user)
-
+        msgs = chat.get_msg(dest=destinatario, remet=user) 
         return render_template('chat.html', chats=chats, msgs=msgs, user=usuario[0], dest=dest)
+        
     else:  
         return render_template('chat.html', chats=chats, user=usuario, dest=dest)
+        
 
 @app.route("/cadastro", methods=['POST'])
 def cadastro():
@@ -166,7 +165,7 @@ def newchat():
     
     session["destinatario_id"] = dest_id
     chat.send_msg(dest_id, session["usuario_id"], mensagem)
-
+    
     return redirect(f"/chat")
 
 @app.route("/erro")
@@ -180,4 +179,5 @@ def not_found(e):
     return render_template('erros.html', tipo_erro=404, erro="Página não encontrada"), 404
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=5000, debug=True)
+    
