@@ -8,6 +8,7 @@
     color: white;
 }
 body {
+    overflow-y: hidden;
     display: flex;
     background-color: #142b44;
 }
@@ -136,6 +137,39 @@ body {
     font-size: 16px;
     margin-bottom: 10px;
 }
+#chat-profile {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+#profile {
+    display: flex;
+    align-items: center;
+    width: fit-content;
+    justify-content: flex-end;
+    border-radius: 30px;
+    background-color: rgba(255, 255, 255, 0.282);
+}
+#profile span {
+    font-family: "Montserrat", sans-serif;
+    color: rgb(255, 255, 255);
+    font-size: 15px;
+    margin: 5px 8px;
+    font-weight: 700;
+}
+#profile a {
+    background-color: #12b39b9f;
+    border-radius: 20px;
+    padding: 5px 8px;
+}
+#profile a:hover {
+    background-color: #c711119d;
+    border-radius: 20px;
+    padding: 5px 8px;
+}
+#profile img {
+    width: 20px;
+}
 #individuals, #groups {
     display: flex;
     flex-direction: column;
@@ -170,7 +204,7 @@ body {
 }
 #chat {
     position: relative;
-    margin: 25px 0;
+    margin: 15px 0 25px;
     width: 95%;
     height: 95%;
     background-color: #ffffff39;
@@ -209,7 +243,9 @@ body {
     }
 }
 #messages {
+    height: 90%;
     padding: 15px;
+    overflow-y: auto;
 }
 .sent-message {
     display: flex;
@@ -275,7 +311,10 @@ body {
         width: 95%;
         height: 95%;
         background-color: #ffffff39;
+
+        
     }
+    
     .sent-message {
         .username {
             font-size: 14px;
@@ -288,6 +327,7 @@ body {
 
     }
 }
+
 
 /* #1d3354
     #467599a2  */

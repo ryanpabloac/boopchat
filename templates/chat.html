@@ -12,7 +12,7 @@
         <div href=""><img src="./../static/src/close.svg"></div>
         <div id="pop-up-box">
            <h1>Nova Conversa</h1>
-           <form action="">
+           <form action="/newchat" method="POST">
                 <label for="email">EMAIL DO DESTINATÁRIO</label>
                 <input type="email" name="email" id="email" placeholder="Digite o email do destinatário">
                 <label for="msg">MENSAGEM</label>
@@ -44,6 +44,10 @@
     <section id="atual-chat-box">
         <div id="chat-profile">
             <h1></h1>
+            <div id="profile">
+                <span>Olá, {{user[0]}}</span>
+                <a href="/logout"><img src="./../static/src/turn-off.svg"></a>
+            </div>
         </div>
         <div id="chat">
             <div id="messages">

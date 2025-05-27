@@ -1,7 +1,7 @@
 import sqlite3
 from scripts import chating
 
-from flask import Flask, request, render_template, redirect, session, url_for
+from flask import Flask, request, render_template, redirect, session, url_for, jsonify
 from werkzeug.security import generate_password_hash, check_password_hash
 
 app = Flask(__name__)
@@ -43,8 +43,13 @@ def formularioChat():
     msg = request.args.get('msg')
     if msg: 
 
+        try:
+            destinatario = session["destinatario_id"][0]
+        except:
+            destinatario = session["destinatario_id"]
+
         chat = chating.Chat()
-        msgs = chat.get_msg(dest=session["destinatario_id"][0], remet=user)
+        msgs = chat.get_msg(dest=destinatario, remet=user)
 
         return render_template('chat.html', chats=chats, msgs=msgs, user=usuario[0], dest=dest)
     else:  
@@ -103,12 +108,32 @@ def chat():
         cursor.execute("SELECT id FROM usuario WHERE nome = ?", (d_username,))
         destinatario_id = cursor.fetchone()
 
+        cursor.execute("SELECT nome FROM usuario WHERE id = ?", (session['usuario_id'], ))
+        usuario = cursor.fetchone()
+
         if not destinatario_id:
-            return "Destinatario não identificado", 401
+            return redirect(url_for("errors", tipo_erro=404, erro="Destinatário não identificado"))
         
         session['destinatario_id'] = destinatario_id
 
-        return redirect(url_for("formularioChat"))
+        chat = chating.Chat()
+        msgs = chat.get_msg(dest=session["destinatario_id"][0], remet=session['usuario_id'])
+        messages = []
+        for msg in msgs:
+            if msg[1] == session['usuario_id']:
+                messages.append({
+                    "remetente": usuario[0],
+                    "mensagem": msg[3],
+                    'data': msg[4]
+                })
+            else:
+                messages.append({
+                    "remetente": d_username,
+                    "mensagem": msg[3],
+                    'data': msg[4]
+                })  
+
+        return messages
 
     else:
         mensagem = request.form.get("mensagem")
@@ -118,15 +143,41 @@ def chat():
         cursor.execute("SELECT id FROM usuario WHERE nome = ?", (destinatario_nome,))
         destinatario_id = cursor.fetchone()
         if not destinatario_id:
-            return "Destinatario não identificado", 401
+            return redirect(url_for("errors", tipo_erro=404, erro="Destinatário não identificado"))
         if not usuario_id:
-            return "Usuário não autenticado", 401
+            return redirect(url_for("errors", tipo_erro=401, erro="Usuário não autenticado"))
         
 
         cursor.execute("INSERT INTO chat (remetente_id, destinatario_id, mensagem) VALUES (?, ?, ?);",(usuario_id, destinatario_id[0], mensagem))
         conn.commit()
         conn.close()
         return redirect("/chat" + "?msg=True")
+
+@app.route("/newchat", methods=["POST"])
+def newchat():
+    email = request.form.get('email')
+    mensagem = request.form.get('msg')
+
+    chat = chating.Chat()
+    dest_id = chat.confirm_user(email)
+
+    if dest_id == None:
+        return redirect(url_for("errors", tipo_erro=404, erro="Destinatário não encontrado"))
+    
+    session["destinatario_id"] = dest_id
+    chat.send_msg(dest_id, session["usuario_id"], mensagem)
+
+    return redirect(f"/chat")
+
+@app.route("/erro")
+def errors():
+    tipo_erro = request.args.get('tipo_erro')
+    erro = request.args.get('erro')
+    return render_template("erros.html", tipo_erro=tipo_erro, erro=erro)
+
+@app.errorhandler(404)
+def not_found(e):
+    return render_template('erros.html', tipo_erro=404, erro="Página não encontrada"), 404
 
 if __name__ == '__main__':
     app.run(debug=True)

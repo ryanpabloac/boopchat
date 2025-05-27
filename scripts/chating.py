@@ -46,14 +46,23 @@ class Chat():
         self.conn.commit()
         self.cursor.close()
 
-    def get_msg(self, dest, remet):
-        self.cursor.execute("SELECT * FROM chat WHERE remetente_id = ? and destinatario_id = ?", (remet, dest))
+    def get_msg(self,dest, remet):
+        self.cursor.execute("SELECT * FROM chat WHERE (remetente_id = ? and destinatario_id = ?) or (remetente_id = ? and destinatario_id = ?)", (remet, dest, dest, remet))
         hist = self.cursor.fetchall()
         self.cursor.close()
 
         return hist
+    
+    def confirm_user(self, email):
+        try:
+            self.cursor.execute("SELECT id FROM usuario WHERE email = ?", (email,))
+            response = self.cursor.fetchone()
+            return response[0]
+        except:
+            return None
 
-t = Chat()
-A = t.get_msg(dest=1,remet=2)
-for a in A:
-    print(a)
+
+# t = Chat()
+# A = t.get_msg(dest=1,remet=2)
+# for a in A:
+#     print(a)
