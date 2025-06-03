@@ -7,7 +7,7 @@
 <p align="center">
   Um aplicativo de chat em tempo real desenvolvido com Flask<br/>
   <strong>Simples, rápido e seguro!</strong> <br>
-  Acessse aqui: ![BoopChat]()
+  **OBS:** O projeto é somente um protótipo, ou seja não está emp produção logo para testar acesse localmente
 </p>
 
 ---
