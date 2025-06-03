@@ -7,7 +7,7 @@
 <p align="center">
   Um aplicativo de chat em tempo real desenvolvido com Flask<br/>
   <strong>Simples, rápido e seguro!</strong> <br>
-  **OBS:** O projeto é somente um protótipo, ou seja não está emp produção logo para testar acesse localmente
+  **OBS:** O projeto é somente um protótipo, ou seja não está em produção logo para testar acesse localmente
 </p>
 
 ---
